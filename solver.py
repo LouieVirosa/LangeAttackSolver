@@ -45,5 +45,16 @@ if __name__ == "__main__":
     '''
     print("Starting brute force for max lange attack...")
     for i in itertools.permutations([0,1,2,3,4,5,6,7,8,9]):
-        test_solution(i)
+        if test_solution(i):
+            # Test to make sure none of the 25 moves starts with 0
+            soln_dict = {langelist[y]:i[y] for y in range(len(i))}
+            zero_char = next((char for char, val in soln_dict.items() if val == 0), None)
+            if any(l.startswith(zero_char) for l in langemoves):
+                print(f"Found FALSE Solution: {soln_dict}\n\n")
+            else: 
+                print(f"**** FOUND TRUE SOLUTION: {soln_dict} ****")
+                final_coords = str(map_symbols('QN-B-NPRHRBQN--O', i))
+                coords_str = f"{final_coords[:2]}S {final_coords[2:9]} {final_coords[9:]}"
+                print(f"Final Coords: {coords_str}\n\n")
+                
     print("Done!")
