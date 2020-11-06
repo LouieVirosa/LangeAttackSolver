@@ -8,7 +8,7 @@ langemoves = ["P-K4", "P-K4", "N-KB3", "N-QB3", "B-B4", "N-B3", "P-Q4", "PxP", "
 
 # The following globals allow for us to manipulate the set of symbols used in the 25-move chess game above
 digichars = [str(i) for i in range(10)] # Digits 0-9 as chars so we can ignore them
-langeset = {i for ele in langemoves for i in ele if i not in digichars} # set of unique chars from langemoves
+langeset = {char for move in langemoves for char in move if char not in digichars} # set of unique chars from langemoves
 langelist = list(langeset) # list of unique chars from langemoves, as they are mutable
 langelist.append('H') # 'H' is in the solution, but not the 25 moves. Adding it manually.
 
@@ -23,25 +23,21 @@ def map_symbols(string, curmap):
 def test_solution(curmap):
     '''
     Maps all 25 moves to integer representations, adds them up, and compares to the solution string "BOOHOO"
-    given a map.
-    curmap: Currrent mapping of langelist of unique symbols to digits. I probably should have done this
-        as a dict, but it is a list, and should be of the form [0,1,2,3,4,5,6,7,8,9] or similar.
+        given a map.
+        
+    curmap: Currrent mapping of langelist of unique symbols to digits. This is a list, and should be of the 
+        form [0,1,2,3,4,5,6,7,8,9] or similar.
     '''
     langesum = sum(list(map(lambda x:map_symbols(x, curmap), langemoves)))
     solsum = map_symbols("BOOHOO", curmap)
     if langesum == solsum:
-        print("FOUND SOLUTION!")
-        print(f"LangeList: {langelist}")
-        print(f"Mapping: {curmap}")
         return True
     return False
 
 
 if __name__ == "__main__":
     '''
-    Iterates through all permutations of [0,1,2,3,4,5,6,7,8,9] and checks for solutions that sum to 'BOOHOO'.
-    There are 3 solutions, but 2 are disallows because they create integers that start with 0. Manually check
-    for these and translate the final clue into a UTM grid coord using the printed mappings.
+    Iterates through all permutations of [0,1,2,3,4,5,6,7,8,9] for the 10 input variables, and checks for valid solutions
     '''
     print("Starting brute force for max lange attack...")
     for i in itertools.permutations([0,1,2,3,4,5,6,7,8,9]):
